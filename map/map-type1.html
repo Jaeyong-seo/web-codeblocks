@@ -130,25 +130,29 @@
     </div>
     
     <script>
-    // 샘플 매장 데이터 15개 (link 필드 추가)
+    // 하드코딩된 매장 정보 (좌표 포함)
     const stores = [
-      { name: '공릉점', addr: '서울특별시 노원구 공릉로 211', tel: '02-971-1358', lat: 37.6283292, lng: 127.0773267, img: 'https://cdn.imweb.me/thumbnail/20250514/1b6ca289aa28c.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '서울대동원관직영점', addr: '서울특별시 관악구 관악로 1', tel: '02-000-0000', lat: 37.4649437, lng: 126.9517459, img: 'https://cdn.imweb.me/thumbnail/20250429/405ed072f1c66.png', link: 'https://naver.me/GALpSjxq' },
-      { name: '망원직영점', addr: '서울특별시 마포구 월드컵로23길 4', tel: '02-336-3538', lat: 37.5575545, lng: 126.9082197, img: 'https://cdn.imweb.me/thumbnail/20250328/105b6bb063eb4.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '연신내직영점', addr: '서울특별시 은평구 통일로 855-20', tel: '02-123-4567', lat: 37.6196702, lng: 126.919901, img: 'https://cdn.imweb.me/thumbnail/20250306/abb674568dba7.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '어린이대공원점', addr: '서울특별시 광진구 광나루로 390', tel: '0507-1389-7035', lat: 37.5473917, lng: 127.0729784, img: 'https://cdn.imweb.me/thumbnail/20241114/48e5128344170.png', link: 'https://naver.me/GALpSjxq' },
-      { name: '홍대직영점', addr: '서울특별시 마포구 홍익로 25', tel: '02-111-2222', lat: 37.554433, lng: 126.9219995, img: 'https://cdn.imweb.me/thumbnail/20241204/21c70cb3cf00d.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '신도림점', addr: '서울특별시 구로구 경인로 661', tel: '0507-1370-3508', lat: 37.5100374, lng: 126.8883336, img: 'https://cdn.imweb.me/thumbnail/20241112/a44e6e70a990c.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '고대안암점', addr: '서울특별시 성북구 고려대로24길 25', tel: '0507-1353-1174', lat: 37.5850452, lng: 127.0295515, img: 'https://cdn.imweb.me/thumbnail/20241028/06bb630ec8942.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '회기점', addr: '서울특별시 동대문구 경희대로4길 2', tel: '0507-1430-8952', lat: 37.5925038, lng: 127.0527007, img: 'https://cdn.imweb.me/thumbnail/20241101/96478f1f97147.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '서울대입구직영점', addr: '서울특별시 관악구 관악로 154', tel: '02-877-2999', lat: 37.4789287, lng: 126.9526335, img: 'https://cdn.imweb.me/thumbnail/20240621/cc2cf5b43b2bb.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '강남역점', addr: '서울특별시 강남구 강남대로 396', tel: '02-345-6789', lat: 37.497942, lng: 127.027621, img: 'https://cdn.imweb.me/thumbnail/20240621/cc2cf5b43b2bb.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '잠실점', addr: '서울특별시 송파구 올림픽로 240', tel: '02-456-7890', lat: 37.513272, lng: 127.100197, img: 'https://cdn.imweb.me/thumbnail/20241114/48e5128344170.png', link: 'https://naver.me/GALpSjxq' },
-      { name: '신촌점', addr: '서울특별시 서대문구 연세로 50', tel: '02-234-5678', lat: 37.559169, lng: 126.936906, img: 'https://cdn.imweb.me/thumbnail/20250328/105b6bb063eb4.jpg', link: 'https://naver.me/GALpSjxq' },
-      { name: '건대점', addr: '서울특별시 광진구 능동로 120', tel: '02-567-8901', lat: 37.540705, lng: 127.070222, img: 'https://cdn.imweb.me/thumbnail/20250429/405ed072f1c66.png', link: 'https://naver.me/GALpSjxq' },
-      { name: '이태원점', addr: '서울특별시 용산구 이태원로 177', tel: '02-678-9012', lat: 37.534508, lng: 126.994965, img: 'https://cdn.imweb.me/thumbnail/20241204/21c70cb3cf00d.jpg', link: 'https://naver.me/GALpSjxq' }
+      { name: "진주직영점", addr: "경남 진주시 비봉로34번길 14, 1층 리얼식단 진주중안본점", tel: "010-3838-0216", lat: 35.180188, lng: 128.107621, link: "https://naver.me/5xjxqLXM" },
+      { name: "대구황금역점", addr: "대구광역시 동대구로 14길 77, 1층 예담청", tel: "010-6568-1670", lat: 35.834944, lng: 128.626821, link: "https://naver.me/5UEQrzWD" },
+      { name: "진주평거점", addr: "경남 진주시 진양호로 28번길 39-10,1층 미드테이블", tel: "010-7193-9416", lat: 35.170885, lng: 128.084857, link: "https://naver.me/x2jQyQQj" },
+      { name: "전북도청점", addr: "전북특별자치도 전주시 완산구 범안1길 12,101호 (효자동2가, 소나무숲)", tel: "010-4933-7909", lat: 35.813073, lng: 127.108944, link: "https://naver.me/FSw2Ynfp" },
+      { name: "익산원광대점", addr: "전북 익산대로 76번길106,뉴커피", tel: "010-2317-0506", lat: 35.969964, lng: 126.957964, link: "https://naver.me/xX7R31GD" },
+      { name: "진해점", addr: "경남 창원시 진해구 석동로30번길13-1 ,1층 카페파운드", tel: "010-8549-5329", lat: 35.151964, lng: 128.701964, link: "https://naver.me/xwmsbyPB" },
+      { name: "구미옥계점", addr: "경북 구미시 대학로39,나동1층 어벤더치", tel: "010-7103-9908", lat: 36.119964, lng: 128.344964, link: "https://naver.me/xVGt4iyq" },
+      { name: "사수점", addr: "대구광역시 북구 내곡로38,1층 104호 카페에이", tel: "010-2296-1034", lat: 35.925964, lng: 128.550964, link: "https://naver.me/Gj60N06t" },
+      { name: "영주점", addr: "경상북도 영주시 대학로284번길33,1층 리얼식단", tel: "010-3756-2093", lat: 36.825964, lng: 128.623964, link: "https://naver.me/xLWtB0uS" },
+      { name: "포항효자점", addr: "경상북도 포항시 남구 효자동길2번길 41, 2층(효자동)", tel: "010-4870-3622", lat: 36.019964, lng: 129.343964, link: "https://naver.me/5uIYb92v" },
+      { name: "경산역점", addr: "경상북도 경산시 경산로 120,1층", tel: "010-9097-9402", lat: 35.825964, lng: 128.741964, link: "https://naver.me/FlZ8HPDN" },
+      { name: "분당점", addr: "경기도 성남시 분당구 정자일로 25, 1층 모어샌드위치 (금곡동, 대덕프라자2)", tel: "010-7567-1224", lat: 37.366964, lng: 127.108964, link: "https://naver.me/FvEgJfZO" },
+      { name: "거제고현점", addr: "거제시 고현항2로 51 이편한세상 거제유로스카이 4블럭 107호 리얼식단", tel: "010-5041-5243", lat: 34.880964, lng: 128.621964, link: "https://naver.me/FioIpJcO" },
+      { name: "김천점", addr: "경북 김천시 김천로 78,1층 풀랑풀랑", tel: "010-2223-5373", lat: 36.139964, lng: 128.113964, link: "https://naver.me/FTMRzYqZ" },
+      { name: "남양점", addr: "경기도 화성시 남양읍 역골로49번길 32-4 1층 투몬스터캔커피", tel: "010-9280-1904", lat: 37.209964, lng: 126.823964, link: "https://naver.me/IItoRQZh" },
+      { name: "구로점", addr: "서울특별시 구로구 공원로27, 1층 104 (구로동, 대림역대성스카이렉스)", tel: "010-9072-6211", lat: 37.495964, lng: 126.882964, link: "https://naver.me/IItoRQZh" },
+      { name: "파주운정점", addr: "경기도 파주시 와석순환로252번길 7-20", tel: "010-8649-3418", lat: 37.739964, lng: 126.765964, link: "https://naver.me/IGJ0JjxV" },
+      { name: "상남직영본점", addr: "경남 창원시 마디미로4번길9,1층 104호 리얼식단", tel: "010-4968-7787", lat: 35.219964, lng: 128.681964, link: "https://naver.me/5Q31LJWF" },
+      { name: "메이힐스점", addr: "강원도 정선군 고한읍 물한리길8 1층 메이힐스리조트 프론트앞", tel: "010-4874-3143", lat: 37.196964, lng: 128.823964, link: "https://naver.me/FjbaMHUH" },
+      { name: "포항북구점", addr: "경북 포항시 북구 삼호로226, 2층", tel: "010-8098-6757", lat: 36.069964, lng: 129.371964, link: "https://naver.me/5S9ndbuC" }
     ];
-
     let filteredStores = stores.slice();
     let markers = [];
     let infoWindow = null;
@@ -166,10 +170,10 @@
       anchor: new naver.maps.Point(13.5, 43)  // 하단 중앙이 기준점
     };
 
-    // 지도 생성
+    // 지도 생성 (기본 좌표로 먼저 생성)
     var map = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(stores[0].lat, stores[0].lng),
-      zoom: 11,
+      center: new naver.maps.LatLng(36.35, 127.38), // 대한민국 중심
+      zoom: 7,
       zoomControl: true,
       zoomControlOptions: {
         position: naver.maps.Position.TOP_RIGHT
@@ -196,10 +200,10 @@
       const content = `
         <div class="info-window">
           <button class="info-close" onclick="window.__closeInfoWindow && window.__closeInfoWindow()">×</button>
-          <img class="info-thumb" src="${store.img}" alt="${store.name}">
+          <img class="info-thumb" src="${store.img || 'asset/logo.jpg'}" alt="${store.name}">
           <div class="info-title">${store.name}</div>
           <div class="info-addr">${store.addr}</div>
-          <span class="info-tel">${store.tel}</span>
+          <span class="info-tel">010-0000-0000</span>
           <a class="info-link-btn" href="${store.link}" target="_blank" rel="noopener noreferrer">네이버 지도 바로가기</a>
         </div>
       `;
@@ -227,13 +231,7 @@
         const div = document.createElement('div');
         div.className = 'store-item';
         div.innerHTML = `
-          <img class="store-thumb" src="${store.img}" alt="${store.name}">
-          <div class="store-info">
-            <div class="store-name">${store.name}</div>
-            <div class="store-addr">${store.addr}</div>
-            <a class="store-tel" href="https://map.naver.com/p/search/${encodeURIComponent(store.name)}" target="_blank" rel="noopener noreferrer">${store.tel}</a>
-          </div>
-        `;
+          <img class=\"store-thumb\" src=\"${store.img || 'asset/logo.jpg'}\" alt=\"${store.name}\">\n          <div class=\"store-info\">\n            <div class=\"store-name\">${store.name}</div>\n            <div class=\"store-addr\">${store.addr}</div>\n            <a class=\"store-tel\" href=\"https://map.naver.com/p/search/${encodeURIComponent(store.name)}\" target=\"_blank\" rel=\"noopener noreferrer\">010-0000-0000</a>\n          </div>\n        `;
         div.onclick = () => focusStore(idx);
         storeList.appendChild(div);
 
@@ -280,6 +278,21 @@
 
     searchClear.classList.toggle('visible', !!searchInput.value);
 
+    // 주소를 좌표로 변환하는 함수 (Promise)
+    function geocodeAddress(address) {
+      return new Promise((resolve, reject) => {
+        naver.maps.Service.geocode({ query: address }, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK || !response.v2.addresses.length) {
+            resolve(null); // 실패 시 null 반환
+          } else {
+            const item = response.v2.addresses[0];
+            resolve({ lat: parseFloat(item.y), lng: parseFloat(item.x) });
+          }
+        });
+      });
+    }
+
+    // fetch 후 지도 렌더링 (주소 → 좌표 변환 포함)
     renderStoreList();
     </script>
     </body>
