@@ -158,12 +158,12 @@
     const searchInput = document.getElementById('searchInput');
     const searchClear = document.getElementById('searchClear');
 
-    // 빨간색 기본 마커(네이버 제공)
+    // 커스텀 마커 이미지
     var markerIcon = {
-      url: 'https://ssl.pstatic.net/static/maps/mantle/1x/marker-default-red.png', // 빨간색 기본 마커
-      size: new naver.maps.Size(24, 35),
+      url: 'asset/marker.png',
+      size: new naver.maps.Size(27, 43),  // 실제 이미지 크기
       origin: new naver.maps.Point(0, 0),
-      anchor: new naver.maps.Point(12, 35)
+      anchor: new naver.maps.Point(13.5, 43)  // 하단 중앙이 기준점
     };
 
     // 지도 생성
