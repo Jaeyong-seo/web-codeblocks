@@ -4,12 +4,111 @@
   <meta charset="UTF-8">
   <title>Codeblock Templates</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .main-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    h1 {
+      background: none;
+      color: #222;
+      padding: 0;
+      margin-bottom: 32px;
+      font-size: 2.2em;
+      text-align: center;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+      border: 1px solid #e0e0e0;
+    }
+    .card:hover {
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      border-color: #b2dfdb;
+    }
+    .card-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #eee;
+      display: block;
+    }
+    .card-body {
+      padding: 20px 18px 18px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #1976d2;
+    }
+    .card-desc {
+      font-size: 1em;
+      color: #444;
+      margin-bottom: 18px;
+    }
+    .card-link {
+      display: inline-block;
+      background: #1976d2;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .card-link:hover {
+      background: #0d47a1;
+    }
+  </style>
 </head>
 <body>
-  <h1>코드블럭 템플릿 목록</h1>
-  <ul>
-    <li><a href="map/map-type1.html">프랜차이즈 매장 지도</a></li>
-    <!-- 추가 코드블럭은 여기에 -->
-  </ul>
+  <div class="main-container">
+    <h1>Codeblock Templates</h1>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-body">
+          <div>
+            <div class="card-title">지도 예제 (매장 찾기)</div>
+            <div class="card-desc">네이버 지도 API와 연동된 매장 찾기 UI 예제입니다. 매장 리스트, 검색, 마커, 인포윈도우, 반응형 UI 등 다양한 기능을 확인할 수 있습니다.</div>
+          </div>
+          <a class="card-link" href="map/map-type1.html">바로가기</a>
+        </div>
+      </div>
+      <!-- 추가 코드블럭 카드 예시 -->
+      <!--
+      <div class="card">
+        <img class="card-thumb" src="썸네일이미지URL" alt="코드블럭명 썸네일">
+        <div class="card-body">
+          <div>
+            <div class="card-title">코드블럭명</div>
+            <div class="card-desc">간단한 설명</div>
+          </div>
+          <a class="card-link" href="templates/코드블럭명.html">바로가기</a>
+        </div>
+      </div>
+      -->
+    </div>
+  </div>
 </body>
 </html> 
