@@ -1,27 +1,282 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>네이버 지도 예제</title>
-    <style>
-      #map {
-        width: 100%;
-        height: 500px;
-        margin: 24px 0;
-      }
-    </style>
-    <!-- 네이버 지도 API 스크립트 (Client ID 적용) -->
-    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=2wjlbifb5x"></script>
-</head>
-<body>
-    <h1>네이버 지도 예제</h1>
-    <div id="map"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <title>매장 찾기 예제</title>
+        <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=2wjlbifb5x&submodules=markerclustering"></script>
+        <style>
+            body { margin: 0; font-family: 'Noto Sans KR', Arial, sans-serif; background: #f8f9fa; }
+            .container {
+                display: flex;
+                max-width: 1200px;
+                min-width: 320px;
+                height: 750px;
+                margin: 32px auto;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+                overflow: hidden;
+            }
+            .store-list { width: 350px; background: #fff; overflow-y: auto; border-right: 1px solid #eee; padding: 0; }
+            .store-list h2 { margin: 0; padding: 20px; background: #222; color: #fff; font-size: 1.3em; }
+            .search-box { position: relative; padding: 12px 20px 0 20px; }
+            .search-input {
+                width: 100%;
+                padding: 8px 32px 8px 12px;
+                font-size: 1em;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                margin-bottom: 8px;
+                box-sizing: border-box;
+                display: block;
+            }
+            .search-clear {
+                position: absolute;
+                right: 28px;
+                top: 20px;
+                width: 20px;
+                height: 20px;
+                background: none;
+                border: none;
+                color: #aaa;
+                font-size: 1.2em;
+                cursor: pointer;
+                display: none;
+                z-index: 2;
+            }
+            .search-clear.visible { display: block; }
+            .store-item { display: flex; align-items: center; padding: 16px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; }
+            .store-item:hover, .store-item.active { background: #f5faff; }
+            .store-thumb { width: 60px; height: 60px; margin-right: 16px; border-radius: 8px; object-fit: cover; background: #eee; }
+            .store-info { flex: 1; }
+            .store-name { font-weight: bold; font-size: 1.1em; margin-bottom: 4px; }
+            .store-addr { font-size: 0.95em; color: #555; margin-bottom: 2px; }
+            .store-tel { font-size: 0.95em; color: #1976d2; text-decoration: none; }
+            .store-tel:hover { text-decoration: underline; }
+            #map { flex: 1; min-width: 0; height: 750px; }
+            @media (max-width: 900px) {
+                .container { flex-direction: column; height: auto; min-width: 0; }
+                .store-list { width: 100%; border-right: none; border-bottom: 1px solid #eee; }
+                #map { height: 400px; }
+            }
+            .info-window {
+                min-width: 260px;
+                max-width: 320px;
+                padding: 16px 16px 12px 16px;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+                font-size: 1em;
+                position: relative;
+            }
+            .info-window .info-title {
+                font-weight: bold;
+                font-size: 1.15em;
+                margin-bottom: 8px;
+                text-align: center;
+            }
+            .info-window .info-thumb {
+                width: 60px; height: 60px; object-fit: cover; border-radius: 8px; display: block; margin: 0 auto 8px auto;
+            }
+            .info-window .info-addr { color: #555; font-size: 0.97em; margin-bottom: 2px; text-align: center; }
+            .info-window .info-tel { color: #1976d2; font-size: 0.97em; text-align: center; margin-bottom: 8px; display: block; }
+            .info-window .info-link-btn {
+                display: block;
+                width: 100%;
+                background: #03c75a;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 0;
+                font-size: 1em;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 8px;
+                text-align: center;
+                text-decoration: none;
+                transition: background 0.2s;
+            }
+            .info-window .info-link-btn:hover {
+                background: #029e46;
+            }
+            .info-window .info-close {
+                position: absolute;
+                top: 10px;
+                right: 12px;
+                font-size: 1.2em;
+                color: #888;
+                cursor: pointer;
+                background: none;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+    <div style="width:100%;background:#222;padding:0;margin:0;position:sticky;top:0;z-index:1000;">
+      <a href="/index.html" style="display:inline-block;padding:14px 28px;color:#fff;font-weight:bold;font-size:1.1em;text-decoration:none;letter-spacing:1px;">← codeblocks 메뉴로 돌아가기</a>
+    </div>
+    <div class="container">
+        <div class="store-list" id="storeList">
+            <h2>매장 리스트</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="매장명, 주소, 전화번호 검색...">
+                <button id="searchClear" class="search-clear" aria-label="검색 지우기">×</button>
+            </div>
+            <!-- JS로 매장 리스트 렌더링 -->
+        </div>
+        <div id="map"></div>
+    </div>
+    
     <script>
-      var map = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(37.5665, 126.9780), // 서울시청 좌표
-        zoom: 13
+    // 샘플 매장 데이터 15개 (link 필드 추가)
+    const stores = [
+      { name: '공릉점', addr: '서울특별시 노원구 공릉로 211', tel: '02-971-1358', lat: 37.6283292, lng: 127.0773267, img: 'https://cdn.imweb.me/thumbnail/20250514/1b6ca289aa28c.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '서울대동원관직영점', addr: '서울특별시 관악구 관악로 1', tel: '02-000-0000', lat: 37.4649437, lng: 126.9517459, img: 'https://cdn.imweb.me/thumbnail/20250429/405ed072f1c66.png', link: 'https://naver.me/GALpSjxq' },
+      { name: '망원직영점', addr: '서울특별시 마포구 월드컵로23길 4', tel: '02-336-3538', lat: 37.5575545, lng: 126.9082197, img: 'https://cdn.imweb.me/thumbnail/20250328/105b6bb063eb4.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '연신내직영점', addr: '서울특별시 은평구 통일로 855-20', tel: '02-123-4567', lat: 37.6196702, lng: 126.919901, img: 'https://cdn.imweb.me/thumbnail/20250306/abb674568dba7.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '어린이대공원점', addr: '서울특별시 광진구 광나루로 390', tel: '0507-1389-7035', lat: 37.5473917, lng: 127.0729784, img: 'https://cdn.imweb.me/thumbnail/20241114/48e5128344170.png', link: 'https://naver.me/GALpSjxq' },
+      { name: '홍대직영점', addr: '서울특별시 마포구 홍익로 25', tel: '02-111-2222', lat: 37.554433, lng: 126.9219995, img: 'https://cdn.imweb.me/thumbnail/20241204/21c70cb3cf00d.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '신도림점', addr: '서울특별시 구로구 경인로 661', tel: '0507-1370-3508', lat: 37.5100374, lng: 126.8883336, img: 'https://cdn.imweb.me/thumbnail/20241112/a44e6e70a990c.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '고대안암점', addr: '서울특별시 성북구 고려대로24길 25', tel: '0507-1353-1174', lat: 37.5850452, lng: 127.0295515, img: 'https://cdn.imweb.me/thumbnail/20241028/06bb630ec8942.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '회기점', addr: '서울특별시 동대문구 경희대로4길 2', tel: '0507-1430-8952', lat: 37.5925038, lng: 127.0527007, img: 'https://cdn.imweb.me/thumbnail/20241101/96478f1f97147.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '서울대입구직영점', addr: '서울특별시 관악구 관악로 154', tel: '02-877-2999', lat: 37.4789287, lng: 126.9526335, img: 'https://cdn.imweb.me/thumbnail/20240621/cc2cf5b43b2bb.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '강남역점', addr: '서울특별시 강남구 강남대로 396', tel: '02-345-6789', lat: 37.497942, lng: 127.027621, img: 'https://cdn.imweb.me/thumbnail/20240621/cc2cf5b43b2bb.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '잠실점', addr: '서울특별시 송파구 올림픽로 240', tel: '02-456-7890', lat: 37.513272, lng: 127.100197, img: 'https://cdn.imweb.me/thumbnail/20241114/48e5128344170.png', link: 'https://naver.me/GALpSjxq' },
+      { name: '신촌점', addr: '서울특별시 서대문구 연세로 50', tel: '02-234-5678', lat: 37.559169, lng: 126.936906, img: 'https://cdn.imweb.me/thumbnail/20250328/105b6bb063eb4.jpg', link: 'https://naver.me/GALpSjxq' },
+      { name: '건대점', addr: '서울특별시 광진구 능동로 120', tel: '02-567-8901', lat: 37.540705, lng: 127.070222, img: 'https://cdn.imweb.me/thumbnail/20250429/405ed072f1c66.png', link: 'https://naver.me/GALpSjxq' },
+      { name: '이태원점', addr: '서울특별시 용산구 이태원로 177', tel: '02-678-9012', lat: 37.534508, lng: 126.994965, img: 'https://cdn.imweb.me/thumbnail/20241204/21c70cb3cf00d.jpg', link: 'https://naver.me/GALpSjxq' }
+    ];
+
+    let filteredStores = stores.slice();
+    let markers = [];
+    let infoWindow = null;
+    let markerClustering = null;
+
+    const storeList = document.getElementById('storeList');
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+
+    // 빨간색 기본 마커(네이버 제공)
+    var markerIcon = {
+      url: 'https://ssl.pstatic.net/static/maps/mantle/1x/marker-default-red.png', // 빨간색 기본 마커
+      size: new naver.maps.Size(24, 35),
+      origin: new naver.maps.Point(0, 0),
+      anchor: new naver.maps.Point(12, 35)
+    };
+
+    // 지도 생성
+    var map = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(stores[0].lat, stores[0].lng),
+      zoom: 11
+    });
+
+    function clearMarkers() {
+      if (markerClustering) {
+        markerClustering.clear();
+      }
+      markers.forEach(m => m.setMap(null));
+      markers = [];
+    }
+
+    function closeInfoWindow() {
+      if (infoWindow) {
+        infoWindow.setMap(null);
+        infoWindow = null;
+      }
+    }
+
+    function openInfoWindow(store, marker) {
+      closeInfoWindow();
+      const content = `
+        <div class="info-window">
+          <button class="info-close" onclick="window.__closeInfoWindow && window.__closeInfoWindow()">×</button>
+          <img class="info-thumb" src="${store.img}" alt="${store.name}">
+          <div class="info-title">${store.name}</div>
+          <div class="info-addr">${store.addr}</div>
+          <span class="info-tel">${store.tel}</span>
+          <a class="info-link-btn" href="${store.link}" target="_blank" rel="noopener noreferrer">네이버 지도 바로가기</a>
+        </div>
+      `;
+      infoWindow = new naver.maps.InfoWindow({
+        content,
+        maxWidth: 320,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        anchorSize: new naver.maps.Size(0, 0),
+        pixelOffset: new naver.maps.Point(0, -10)
       });
+      infoWindow.open(map, marker);
+      window.__closeInfoWindow = closeInfoWindow;
+    }
+
+    function renderStoreList() {
+      // 리스트 초기화
+      storeList.querySelectorAll('.store-item').forEach(el => el.remove());
+      // 마커 초기화
+      clearMarkers();
+      closeInfoWindow();
+
+      filteredStores.forEach((store, idx) => {
+        // 리스트 렌더링
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        div.innerHTML = `
+          <img class="store-thumb" src="${store.img}" alt="${store.name}">
+          <div class="store-info">
+            <div class="store-name">${store.name}</div>
+            <div class="store-addr">${store.addr}</div>
+            <a class="store-tel" href="https://map.naver.com/p/search/${encodeURIComponent(store.name)}" target="_blank" rel="noopener noreferrer">${store.tel}</a>
+          </div>
+        `;
+        div.onclick = () => focusStore(idx);
+        storeList.appendChild(div);
+
+        // 마커 렌더링 (map 속성 추가)
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(store.lat, store.lng),
+          icon: markerIcon,
+          map: map
+        });
+        marker.addListener('click', function() {
+          focusStore(idx, marker);
+        });
+        markers.push(marker);
+      });
+    }
+
+    function focusStore(idx, markerOverride) {
+      const store = filteredStores[idx];
+      const marker = markerOverride || markers[idx];
+      map.setCenter(new naver.maps.LatLng(store.lat, store.lng));
+      map.setZoom(18); // 클릭 시 확대
+      document.querySelectorAll('.store-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      openInfoWindow(store, marker);
+    }
+
+    searchInput.addEventListener('input', function() {
+      const keyword = this.value.trim().toLowerCase();
+      filteredStores = stores.filter(store =>
+        store.name.toLowerCase().includes(keyword) ||
+        store.addr.toLowerCase().includes(keyword) ||
+        store.tel.toLowerCase().includes(keyword)
+      );
+      renderStoreList();
+      searchClear.classList.toggle('visible', !!this.value);
+    });
+
+    searchClear.addEventListener('click', function() {
+      searchInput.value = '';
+      searchInput.dispatchEvent(new Event('input'));
+      searchInput.focus();
+    });
+
+    searchClear.classList.toggle('visible', !!searchInput.value);
+
+    renderStoreList();
     </script>
-</body>
+    </body>
 </html>
