@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <title>플로팅 배너 예제</title>
+  <style>
+    body { margin: 0; font-family: 'Noto Sans KR', Arial, sans-serif; background: #f8f9fa; }
+    .floating-banner-container {
+      position: fixed;
+      right: 20px; /* 임의 값, 필요시 조정 */
+      bottom: 32px; /* 임의 값, 필요시 조정 */
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 16px; /* 배너 간 간격, 임의 값 */
+    }
+    .floating-banner {
+      display: block;
+      width: 64px; /* 배너 이미지 크기, 임의 값 */
+      height: 64px; /* 배너 이미지 크기, 임의 값 */
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      background: #fff;
+      transition: box-shadow 0.2s;
+    }
+    .floating-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .floating-banner-container {
+        right: 10px;
+        bottom: 16px;
+        gap: 10px;
+      }
+      .floating-banner {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단 네비게이션: map/map-type1.html 참고 -->
+  <div style="width:100%;background:#222;padding:0;margin:0;position:sticky;top:0;z-index:1000;">
+    <a href="/index.html" style="display:inline-block;padding:14px 28px;color:#fff;font-weight:bold;font-size:1.1em;text-decoration:none;letter-spacing:1px;">← codeblocks 메뉴로 돌아가기</a>
+  </div>
+  <div style="max-width:1200px;margin:32px auto 0 auto;padding:0 16px;">
+    <h2 style="font-size:1.6em;font-weight:bold;margin:32px 0 24px 0;">플로팅 배너 예제</h2>
+    <p style="color:#444;font-size:1.1em;margin-bottom:40px;">우측 하단에 고정된 3개의 플로팅 배너가 항상 노출됩니다.<br>이미지, 링크, alt 속성 등은 자유롭게 커스터마이즈할 수 있습니다.</p>
+  </div>
+  <!-- 플로팅 배너 영역 -->
+  <div class="floating-banner-container">
+    <!-- alt는 각 메뉴 특성에 맞게 'banner-특성'으로 지정, 이번 예제는 'banner-kakao'로 통일 -->
+    <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+    </a>
+    <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+    </a>
+    <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+    </a>
+  </div>
+</body>
+</html> 

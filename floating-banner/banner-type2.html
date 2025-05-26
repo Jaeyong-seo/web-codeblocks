@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <title>플로팅 배너 예제 - 타입2</title>
+  <style>
+    body { margin: 0; font-family: 'Noto Sans KR', Arial, sans-serif; background: #f8f9fa; }
+    .floating-banner2-container {
+      position: fixed;
+      right: 20px;
+      bottom: 32px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .floating-main-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #22c55e; /* 임시: 평시엔 초록색 원, 추후 이미지/아이콘 교체 가능 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      position: relative;
+    }
+    .floating-main-btn:active {
+      box-shadow: 0 4px 16px rgba(34,197,94,0.18);
+    }
+    .floating-main-btn span {
+      color: #fff;
+      font-size: 2em;
+      font-weight: bold;
+      user-select: none;
+      pointer-events: none;
+    }
+    .floating-banners {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+    .floating-banner {
+      display: block;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      background: #fff;
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(20px) scale(0.8);
+      transition: opacity 0.35s cubic-bezier(.4,1.4,.6,1), transform 0.35s cubic-bezier(.4,1.4,.6,1);
+      pointer-events: auto;
+    }
+    .floating-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .floating-banner2-container.open .floating-banners .floating-banner {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .floating-banner2-container.open .floating-banners .floating-banner:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+    .floating-banner2-container.open .floating-banners .floating-banner:nth-child(2) {
+      transition-delay: 0.12s;
+    }
+    .floating-banner2-container.open .floating-banners .floating-banner:nth-child(3) {
+      transition-delay: 0.19s;
+    }
+    @media (max-width: 600px) {
+      .floating-banner2-container {
+        right: 10px;
+        bottom: 16px;
+      }
+      .floating-main-btn, .floating-banner {
+        width: 48px;
+        height: 48px;
+      }
+      .floating-banner {
+        margin-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div style="width:100%;background:#222;padding:0;margin:0;position:sticky;top:0;z-index:1000;">
+    <a href="/index.html" style="display:inline-block;padding:14px 28px;color:#fff;font-weight:bold;font-size:1.1em;text-decoration:none;letter-spacing:1px;">← codeblocks 메뉴로 돌아가기</a>
+  </div>
+  <div style="max-width:1200px;margin:32px auto 0 auto;padding:0 16px;">
+    <h2 style="font-size:1.6em;font-weight:bold;margin:32px 0 24px 0;">플로팅 배너 예제 - 타입2</h2>
+    <p style="color:#444;font-size:1.1em;margin-bottom:40px;">평상시엔 초록색 원(임시) 1개만 노출, 클릭 시 3개의 배너가 스르륵 펼쳐지는 애니메이션 UI입니다.<br>다시 클릭하면 닫힙니다. 반응형, 자연스러운 transition 포함.</p>
+  </div>
+  <div class="floating-banner2-container" id="floatingBanner2">
+    <div class="floating-banners">
+      <!-- alt는 각 메뉴 특성에 맞게 'banner-특성'으로 지정, 이번 예제는 'banner-kakao'로 통일 -->
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+        <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+      </a>
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+        <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+      </a>
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+        <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
+      </a>
+    </div>
+    <div class="floating-main-btn" id="floatingMainBtn" title="배너 펼치기/접기">
+      <!-- 임시: 초록색 원, 추후 아이콘/이미지로 교체 가능 -->
+      <span>＋</span>
+    </div>
+  </div>
+  <script>
+    const container = document.getElementById('floatingBanner2');
+    const mainBtn = document.getElementById('floatingMainBtn');
+    let open = false;
+    mainBtn.addEventListener('click', () => {
+      open = !open;
+      container.classList.toggle('open', open);
+      // 버튼 아이콘도 바꿔줌 (＋ ↔ ×)
+      mainBtn.querySelector('span').textContent = open ? '×' : '＋';
+    });
+  </script>
+</body>
+</html> 

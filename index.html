@@ -80,6 +80,43 @@
     .card-link:hover {
       background: #0d47a1;
     }
+    @media (max-width: 600px) {
+      .main-container {
+        margin: 12px auto;
+        padding: 0 4px;
+      }
+      h1 {
+        font-size: 1.4em;
+        margin-bottom: 18px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .card {
+        border-radius: 10px;
+        box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+        padding: 0;
+      }
+      .card-body {
+        padding: 18px 10px 14px 10px;
+      }
+      .card-title {
+        font-size: 1.08em;
+        margin-bottom: 7px;
+      }
+      .card-desc {
+        font-size: 0.98em;
+        margin-bottom: 12px;
+      }
+      .card-link {
+        font-size: 1em;
+        padding: 10px 0;
+        width: 100%;
+        border-radius: 6px;
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
@@ -93,6 +130,24 @@
             <div class="card-desc">네이버 지도 API와 연동된 매장 찾기 UI 예제입니다. 매장 리스트, 검색, 마커, 인포윈도우, 반응형 UI 등 다양한 기능을 확인할 수 있습니다.</div>
           </div>
           <a class="card-link" href="map/map-type1.html">바로가기</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div>
+            <div class="card-title">플로팅 배너 예제</div>
+            <div class="card-desc">항상 3개의 배너가 우측 하단에 고정되어 노출됩니다.<br>각 배너는 이미지, 링크, alt 속성 등 자유롭게 커스터마이즈할 수 있습니다.</div>
+          </div>
+          <a class="card-link" href="floating-banner/banner-type1.html">바로가기</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div>
+            <div class="card-title">플로팅 배너 예제 - 타입2</div>
+            <div class="card-desc">초록색 원 버튼만 보이다가, 클릭 시 3개의 배너가 애니메이션과 함께 펼쳐집니다.<br>다시 버튼을 누르면 배너가 닫히는 인터랙티브한 UI입니다.</div>
+          </div>
+          <a class="card-link" href="floating-banner/banner-type2.html">바로가기</a>
         </div>
       </div>
       <!-- 추가 코드블럭 카드 예시 -->
