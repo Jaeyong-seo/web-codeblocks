@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <title>플로팅 배너 예제 - 타입2</title>
   <style>
+    html, body {
+      overflow-x: hidden;
+    }
     body { margin: 0; font-family: 'Noto Sans KR', Arial, sans-serif; background: #f8f9fa; }
     .floating-banner2-container {
       position: fixed;
       right: 20px;
       bottom: 32px;
-      z-index: 1000;
+      z-index: 9999; /* z-index 충분히 크게 */
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      max-width: 100vw;
+      max-height: 100vh;
     }
     .floating-main-btn {
       width: 64px;
       height: 64px;
+      min-width: 48px;
+      min-height: 48px;
       border-radius: 50%;
       background: #22c55e; /* 임시: 평시엔 초록색 원, 추후 이미지/아이콘 교체 가능 */
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
@@ -27,15 +34,21 @@
       cursor: pointer;
       transition: box-shadow 0.2s;
       position: relative;
+      outline: none;
+      border: none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .floating-main-btn:active {
-      box-shadow: 0 4px 16px rgba(34,197,94,0.18);
+    .floating-main-btn:focus {
+      outline: none;
     }
     .floating-main-btn span {
       color: #fff;
       font-size: 2em;
       font-weight: bold;
       user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
       pointer-events: none;
     }
     .floating-banners {
@@ -48,6 +61,8 @@
       display: block;
       width: 64px;
       height: 64px;
+      min-width: 48px;
+      min-height: 48px;
       border-radius: 50%;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
@@ -57,12 +72,21 @@
       transform: translateY(20px) scale(0.8);
       transition: opacity 0.35s cubic-bezier(.4,1.4,.6,1), transform 0.35s cubic-bezier(.4,1.4,.6,1);
       pointer-events: auto;
+      outline: none;
+      border: none;
     }
     .floating-banner img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      user-drag: none;
+      -webkit-user-drag: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      pointer-events: auto;
     }
     .floating-banner2-container.open .floating-banners .floating-banner {
       opacity: 1;
@@ -80,12 +104,15 @@
     }
     @media (max-width: 600px) {
       .floating-banner2-container {
-        right: 10px;
-        bottom: 16px;
+        right: 4vw;
+        bottom: 2vw;
+        max-width: 96vw;
       }
       .floating-main-btn, .floating-banner {
         width: 48px;
         height: 48px;
+        min-width: 40px;
+        min-height: 40px;
       }
       .floating-banner {
         margin-bottom: 8px;
@@ -104,20 +131,20 @@
   <div class="floating-banner2-container" id="floatingBanner2">
     <div class="floating-banners">
       <!-- alt는 각 메뉴 특성에 맞게 'banner-특성'으로 지정, 이번 예제는 'banner-kakao'로 통일 -->
-      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer" aria-label="카카오 배너1" tabindex="0">
         <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
       </a>
-      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer" aria-label="카카오 배너2" tabindex="0">
         <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
       </a>
-      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
+      <a class="floating-banner" href="https://www.naver.com" target="_blank" rel="noopener noreferrer" aria-label="카카오 배너3" tabindex="0">
         <img src="https://cdn.imweb.me/upload/S2024052116b63c1d991ab/e947d1f0b6802.png" alt="banner-kakao">
       </a>
     </div>
-    <div class="floating-main-btn" id="floatingMainBtn" title="배너 펼치기/접기">
+    <button class="floating-main-btn" id="floatingMainBtn" title="배너 펼치기/접기" aria-label="배너 펼치기/접기" tabindex="0">
       <!-- 임시: 초록색 원, 추후 아이콘/이미지로 교체 가능 -->
       <span>＋</span>
-    </div>
+    </button>
   </div>
   <script>
     const container = document.getElementById('floatingBanner2');
@@ -128,6 +155,22 @@
       container.classList.toggle('open', open);
       // 버튼 아이콘도 바꿔줌 (＋ ↔ ×)
       mainBtn.querySelector('span').textContent = open ? '×' : '＋';
+    });
+    // 키보드 접근성: Enter/Space로도 열고 닫기
+    mainBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        mainBtn.click();
+      }
+    });
+    // 배너도 키보드로 접근 가능하게
+    document.querySelectorAll('.floating-banner').forEach(banner => {
+      banner.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          banner.click();
+        }
+      });
     });
   </script>
 </body>
